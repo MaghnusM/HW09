@@ -23,14 +23,9 @@ import java.awt.event.*;
  * slowing if you try to create a new BufferedImage every time the draw method
  * is invoked.
  */
-public class Clicker extends JComponent {
+public class Clicker extends JButton {
 	
-	public static final String img_file = "poison.png";
-//	public static final int SIZE = 40;
-//	public static final int INIT_X = 100;
-//	public static final int INIT_Y = 100;
-//	public static final int INIT_VEL_X = 0;
-//	public static final int INIT_VEL_Y = 0;
+	public static final String img_file = "cookie.png";
 	
 	public int pos_x; 
 	public int pos_y;
@@ -39,41 +34,22 @@ public class Clicker extends JComponent {
 	public int width;
 	public int height;
 	
-	private static BufferedImage img;
+	private static ImageIcon img;
 	
-	GameCourt mainCourt;
-	
-	public Clicker(String name, int pos_x, int pos_y, int width, int height, GameCourt mainCourt) {
-//		super(INIT_VEL_X, INIT_VEL_Y, INIT_X, INIT_Y, SIZE, SIZE, courtWidth,
-//				courtHeight);
-		
+	public Clicker(String name) {
 		this.setName(name);
-		this.setPreferredSize(new Dimension(width, height));
-		this.setLocation(pos_x, pos_y);
-		this.pos_x = pos_x;
-		this.pos_y = pos_y;
-		this.width = width;
-		this.height = height;
-		
-		this.mainCourt = mainCourt;
-		
-		try {
-			if (img == null) {
-				img = ImageIO.read(new File(img_file));
-			}
-		} catch (IOException e) {
-			System.out.println("Internal Error:" + e.getMessage());
-		}
+		img = new ImageIcon(img_file);
+		this.setIcon(img);
 	}
 	
-//	@Override
-	public void draw(Graphics g) {
-		g.drawImage(img, pos_x, pos_y, width, height, null);
-	}
+//	public void draw(Graphics g) {
+//		g.drawImage(img, pos_x, pos_y, width, height, null);
+//	}
+	
+	
 	
 	public void addPoints() {
-		System.out.println("add points");
-		mainCourt.addPoints(true);
+//		mainCourt.addPoints(true);
 	}
 
 }

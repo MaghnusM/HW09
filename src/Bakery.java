@@ -23,7 +23,7 @@ import java.awt.event.*;
 import javax.swing.*;
 import java.awt.geom.*;
 
-public class Grandma extends CandyProducer {
+public class Bakery extends CandyProducer {
 	
 	private String name;
 	private int id;
@@ -32,10 +32,7 @@ public class Grandma extends CandyProducer {
 	private String candyType;
 	private int time;
 	
-//	private int x_pos;
-//	private int y_pos; 
-	
-	public Grandma(int id, GameCourt court, int row, int col) {
-		super("Grandma", id, 1, 1000, court, "null", 50, 50, row, col);
+	public Bakery(int id, GameCourt court, int row, int col) {
+		super("Bakery", id, 50, 10000, court, "null", 50, 50, row, col);
 	} 
 }
