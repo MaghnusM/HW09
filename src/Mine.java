@@ -33,6 +33,6 @@ public class Mine extends CandyProducer {
 	private int time;
 	
 	public Mine(int id, GameCourt court, int row, int col) {
-		super("Mine", id, 250, 20000, court, "null", 50, 50, row, col);
+		super("Mine", id, 2000, 20000, court, "mine.png", 50, 50, row, col);
 	} 
 }

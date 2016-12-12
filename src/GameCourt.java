@@ -55,30 +55,33 @@ public class GameCourt extends JPanel {
 	
 	// Set score TODO: is this the right place to put this?
 	private int score = 0;
+	
+	public static double rate = 0.0;
 
 	public boolean playing = false; // whether the game is running
 	
 	private JLabel status; // Current status text (i.e. Running...)
 	private JLabel scoreLabel;
+	private JLabel rateLabel;
 	
 	private JButton grandmaButton;
 	private static final int GRANDMA_COST = 50;
 	private String grandmaST = "";
 	
 	private JButton chefButton;
-	private static final int CHEF_COST = 200;
+	private static final int CHEF_COST = 250;
 	private String chefST = "";
 	
 	private JButton bakeryButton;
-	private static final int BAKERY_COST = 1000;
+	private static final int BAKERY_COST = 2500;
 	private String bakeryST = "";
 	
 	private JButton gigFacButton;
-	private static final int GFL_COST = 100000;
+	private static final int GFL_COST = 14000;
 	private String gfST = "";
 	
 	private JButton mineButton;
-	private static final int MINE_COST = 10000;
+	private static final int MINE_COST = 14000;
 	private String mineST = "";
 
 	// Game constants
@@ -114,34 +117,18 @@ public class GameCourt extends JPanel {
 		// events will be handled by its key listener.
 		setFocusable(true);
 
-		// This key listener allows the square to move as long
-		// as an arrow key is pressed, by changing the square's
-		// velocity accordingly. (The tick method below actually
-		// moves the square.)
-//		addKeyListener(new KeyAdapter() {
-//			public void keyPressed(KeyEvent e) {
-//				if (e.getKeyCode() == KeyEvent.VK_LEFT)
-//					square.v_x = -SQUARE_VELOCITY;
-//				else if (e.getKeyCode() == KeyEvent.VK_RIGHT)
-//					square.v_x = SQUARE_VELOCITY;
-//				else if (e.getKeyCode() == KeyEvent.VK_DOWN)
-//					square.v_y = SQUARE_VELOCITY;
-//				else if (e.getKeyCode() == KeyEvent.VK_UP)
-//					square.v_y = -SQUARE_VELOCITY;
-//			}
-//
-//			public void keyReleased(KeyEvent e) {
-//				square.v_x = 0;
-//				square.v_y = 0;
-//			}
-//		});
 
 		this.status = status;
 		
 		this.scoreLabel = new JLabel(Integer.toString(this.score));
-		scoreLabel.setBounds(COURT_WIDTH/2 - 50, 80, 300, 100);
+		scoreLabel.setBounds(COURT_WIDTH/2 - 50, 40, 300, 100);
 		scoreLabel.setFont(new Font("Serif", Font.BOLD, 90));
 		this.add(scoreLabel);
+		
+		this.rateLabel = new JLabel((Double.toString(rate) + " candy/sec"));
+		rateLabel.setBounds(COURT_WIDTH/2 - 50, 100, 300, 100);
+		rateLabel.setFont(new Font("Serif", Font.BOLD, 40));
+		this.add(rateLabel);
 		
 		this.grandmaButton = new JButton("GRANDMAS" + grandmaST);
 		grandmaButton.setBounds(COURT_WIDTH + (50 - 45), 0, 90, 40);
@@ -211,7 +198,6 @@ public class GameCourt extends JPanel {
 	 * (Re-)set the game to its initial state.
 	 */
 	public void reset() {
-//		poison = new Poison(COURT_WIDTH, COURT_HEIGHT);
 		
 		playing = true;
 		status.setText("Running...");
@@ -227,29 +213,6 @@ public class GameCourt extends JPanel {
 	 */
 	void tick() {
 		if (playing) {
-			// advance the square and snitch in their
-			// current direction.
-//			square.move();
-//			snitch.move();
-
-			// make the snitch bounce off walls...
-//			snitch.bounce(snitch.hitWall());
-			// ...and the mushroom
-//			snitch.bounce(snitch.hitObj(poison));
-
-			// check for the game end conditions
-//			if (square.intersects(poison)) {
-//				playing = false;
-//				status.setText("You lose!");
-//
-//			}
-			
-//			if (square.intersects(snitch)) {
-//				playing = false;
-//				status.setText("You win!");
-//			}
-
-			// update the display
 			repaint();
 		}
 	}
@@ -281,19 +244,19 @@ public class GameCourt extends JPanel {
 				candies.put(id, can);
 			}
 		}
-//		System.out.println("points = " + points);
-//		System.out.println(this.score);
+
+		
 		this.score = this.score + points;
 		scoreLabel.setText(Integer.toString(this.score));
-//		System.out.println(this.score);
+		rateLabel.setText(Double.toString(rate) + " candy/sec");
+		
+		
 	}
 	
 	public void addProducer(String className) {
 		try {
 			if(className.equals("Grandma")) {
 				if(score >= GRANDMA_COST) {
-					score = score - GRANDMA_COST;
-					scoreLabel.setText(Integer.toString(score));
 					for(int i = 0; i < GRANDMA_COST; i++) {
 						candies.remove(candies.lastKey());
 					}
@@ -305,6 +268,9 @@ public class GameCourt extends JPanel {
 								int id = producerGrid[i][j].getId();
 								producerGrid[i][j] = new Grandma(id, this, j, i);
 								this.add(producerGrid[i][j]);
+								score = score - GRANDMA_COST;
+								scoreLabel.setText(Integer.toString(this.score));
+								rateLabel.setText(Double.toString(rate) + " candy/sec");
 								setOne = false;
 							}
 						}
@@ -312,8 +278,6 @@ public class GameCourt extends JPanel {
 				}
 			} else if(className.equals("Chef")) {
 				if(score >= CHEF_COST) {
-					score = score - CHEF_COST;
-					scoreLabel.setText(Integer.toString(score));
 					for(int i = 0; i < CHEF_COST; i++) {
 						candies.remove(candies.lastKey());
 					}
@@ -325,6 +289,9 @@ public class GameCourt extends JPanel {
 								int id = producerGrid[i][j].getId();
 								producerGrid[i][j] = new Chef(id, this, j, i);
 								this.add(producerGrid[i][j]);
+								score = score - CHEF_COST;
+								scoreLabel.setText(Integer.toString(this.score));
+								rateLabel.setText(Double.toString(rate) + " candy/sec");
 								setOne = false;
 							}
 						}
@@ -332,8 +299,6 @@ public class GameCourt extends JPanel {
 				}
 			} else if(className.equals("Bakery")) {
 				if(score >= BAKERY_COST) {
-					score = score - BAKERY_COST;
-					scoreLabel.setText(Integer.toString(score));
 					for(int i = 0; i < BAKERY_COST; i++) {
 						candies.remove(candies.lastKey());
 					}
@@ -345,6 +310,9 @@ public class GameCourt extends JPanel {
 								int id = producerGrid[i][j].getId();
 								producerGrid[i][j] = new Bakery(id, this, j, i);
 								this.add(producerGrid[i][j]);
+								score = score - BAKERY_COST;
+								scoreLabel.setText(Integer.toString(this.score));
+								rateLabel.setText(Double.toString(rate) + " candy/sec");
 								setOne = false;
 							}
 						}
@@ -352,8 +320,6 @@ public class GameCourt extends JPanel {
 				}
 			} else if(className.equals("Mine")) {
 				if(score >= MINE_COST) {
-					score = score - MINE_COST;
-					scoreLabel.setText(Integer.toString(score));
 					for(int i = 0; i < MINE_COST; i++) {
 						candies.remove(candies.lastKey());
 					}
@@ -365,6 +331,9 @@ public class GameCourt extends JPanel {
 								int id = producerGrid[i][j].getId();
 								producerGrid[i][j] = new Mine(id, this, j, i);
 								this.add(producerGrid[i][j]);
+								score = score - MINE_COST;
+								scoreLabel.setText(Integer.toString(this.score));
+								rateLabel.setText(Double.toString(rate) + " candy/sec");
 								setOne = false;
 							}
 						}
@@ -372,8 +341,6 @@ public class GameCourt extends JPanel {
 				}
 			} else if(className.equals("GigFac")) {
 				if(score >= GFL_COST) {
-					score = score - GFL_COST;
-					scoreLabel.setText(Integer.toString(score));
 					for(int i = 0; i < GFL_COST; i++) {
 						candies.remove(candies.lastKey());
 					}
@@ -385,6 +352,9 @@ public class GameCourt extends JPanel {
 								int id = producerGrid[i][j].getId();
 								producerGrid[i][j] = new GigFac(id, this, j, i);
 								this.add(producerGrid[i][j]);
+								score = score - GFL_COST;
+								scoreLabel.setText(Integer.toString(this.score));
+								rateLabel.setText(Double.toString(rate) + " candy/sec");
 								setOne = false;
 							}
 						}
@@ -394,6 +364,11 @@ public class GameCourt extends JPanel {
 		} catch (Exception e) {
 			System.out.println("was a problem");
 		}
+	}
+	
+	public void winGame() {
+		playing = false;
+		scoreLabel.setText("You won!");
 	}
 
 	@Override

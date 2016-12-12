@@ -33,6 +33,6 @@ public class Bakery extends CandyProducer {
 	private int time;
 	
 	public Bakery(int id, GameCourt court, int row, int col) {
-		super("Bakery", id, 50, 10000, court, "null", 50, 50, row, col);
+		super("Bakery", id, 200, 10000, court, "bakery.png", 50, 50, row, col);
 	} 
 }

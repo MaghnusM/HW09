@@ -39,7 +39,6 @@ public class Candy extends GameObj{
 		int row = (int) Math.floor((id * SIZE) / courtDim);
 		this.pos_x = (id * SIZE) - (row * courtDim);
 		if(id != 0) {
-//			System.out.println("pos_y: " + ( SIZE * Math.floor(id/(courtDim/SIZE)) ));
 			this.pos_y = (int) ( SIZE * Math.floor(id/(courtDim/SIZE)) );
 			
 		} else {

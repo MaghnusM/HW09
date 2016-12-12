@@ -7,10 +7,13 @@ import java.awt.Graphics2D;
 import java.awt.Stroke;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 import java.awt.BorderLayout;
 import java.awt.event.*;
+
+import javax.imageio.ImageIO;
 import javax.swing.*;
 
 
@@ -53,9 +56,13 @@ public class CandyProducer extends JLabel {
 		this.topPadding = 50;
 		this.amount = amount;
 		
+		if(amount == -1) {
+			court.winGame();
+		}
 		
 		if(time != 0) {
-			System.out.println("time is: " + time);
+			court.rate = court.rate + ((Double) (amount/(time/1000.0)));
+			System.out.println((Double) (amount/(time/1000.0)));
 			Timer timer = new Timer(time, new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					makeCandy();
@@ -64,13 +71,17 @@ public class CandyProducer extends JLabel {
 			timer.start();
 		}
 		
-		if(!img_file.equals("null")) {
-			System.out.println("was null");
-			img = new ImageIcon(img_file);
-			this.setIcon(img);
-		} else {
-//			System.out.println("set text");
+		if(img_file.equals("null")) {
 			this.setText(name);
+		} else {
+			try {
+				Image imgF = ImageIO.read(new File(img_file));
+				Image imgS = imgF.getScaledInstance(width, height, 0);
+				img = new ImageIcon(imgS);
+				this.setIcon(img);
+			} catch (Exception e) {
+				System.out.println("oh no");
+			}
 		}
 		
 		this.setLocation();

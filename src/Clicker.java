@@ -41,15 +41,5 @@ public class Clicker extends JButton {
 		img = new ImageIcon(img_file);
 		this.setIcon(img);
 	}
-	
-//	public void draw(Graphics g) {
-//		g.drawImage(img, pos_x, pos_y, width, height, null);
-//	}
-	
-	
-	
-	public void addPoints() {
-//		mainCourt.addPoints(true);
-	}
 
 }

@@ -33,6 +33,6 @@ public class GigFac extends CandyProducer {
 	private int time;
 	
 	public GigFac(int id, GameCourt court, int row, int col) {
-		super("Mine", id, 500, 30000, court, "null", 50, 50, row, col);
+		super("GigFac", id, -1, -1, court, "factory.png", 50, 50, row, col);
 	} 
 }
