@@ -29,7 +29,8 @@ import java.awt.event.*;
 import javax.swing.*;
 import java.awt.geom.*;
 import java.lang.reflect.*;
-
+import java.io.*;
+import java.util.Collections;
 
 /**
  * GameCourt
@@ -44,7 +45,7 @@ public class GameCourt extends JPanel {
 
 	// the state of the game logic
 	private Clicker clicker; // the main candy-clicker, doesn't move
-	
+	private static final String HIGHSCORE_FILE = "highscore.txt";
 	
 	private TreeMap<Integer, Candy> candies = new TreeMap<Integer, Candy>();
 	
@@ -52,6 +53,8 @@ public class GameCourt extends JPanel {
 	private int numProducers_y = (COURT_HEIGHT - 50) / 50;
 	public static final int PRODUCER_SPACER = 50;
 	private CandyProducer[][] producerGrid = new CandyProducer[numProducers_x][numProducers_y];
+	
+	private List<Integer> highscores = new LinkedList<Integer>();
 	
 	// Set score TODO: is this the right place to put this?
 	private int score = 0;
@@ -77,7 +80,7 @@ public class GameCourt extends JPanel {
 	private String bakeryST = "";
 	
 	private JButton gigFacButton;
-	private static final int GFL_COST = 14000;
+	private static final int GFL_COST = 10000;
 	private String gfST = "";
 	
 	private JButton mineButton;
@@ -193,19 +196,6 @@ public class GameCourt extends JPanel {
 		this.setBackground( Color.WHITE );
 		
 	}
-
-	/**
-	 * (Re-)set the game to its initial state.
-	 */
-	public void reset() {
-		
-		playing = true;
-		status.setText("Running...");
-		initializeProducers();
-
-		// Make sure that this component has the keyboard focus
-		requestFocusInWindow();
-	}
 	
 	/**
 	 * This method is called every time the timer defined in the constructor
@@ -249,8 +239,6 @@ public class GameCourt extends JPanel {
 		this.score = this.score + points;
 		scoreLabel.setText(Integer.toString(this.score));
 		rateLabel.setText(Double.toString(rate) + " candy/sec");
-		
-		
 	}
 	
 	public void addProducer(String className) {
@@ -369,6 +357,96 @@ public class GameCourt extends JPanel {
 	public void winGame() {
 		playing = false;
 		scoreLabel.setText("You won!");
+	}
+	
+	public void openInstructions() {
+		
+		JOptionPane.showMessageDialog(this, "Hello! Welcome to Cookie Clicker.\n" +
+				"The goal of this game is to fill the entire screen with cookies, all 14,400 places\n" +
+				"Of course, you can add cookies by clicking the large cookie button.\n" +
+				"However, of course that won't be enough - you'll need to add Cookie Producers to help you\n" +
+				"These are:\n" +
+				"Grandmas: COST: 50, COOKIE RATE: 1 every 8 seconds\n" +
+				"Chefs: COST: 250, COOKIE RATE: 5 every 5 seconds\n" +
+				"Bakeries: COST: 2500, COOKIE RATE: 200 every 10 seconds\n" +
+				"Mines: COST: 10000, COOKIE RATE: 2000 every 20 seconds\n" +
+				"GigFactory LLC: COST: 14000, COOKIE RATE: Immediate Win!\n\n" +
+				"Good luck!");
+    }
+	
+	/**
+	 * (Re-)set the game to its initial state.
+	 */
+	public void reset() {
+		
+		playing = true;
+		status.setText("Running...");
+		initializeProducers();
+
+		// Make sure that this component has the keyboard focus
+		requestFocusInWindow();
+		
+		FileReader fileRead = null;
+		BufferedReader bufferRead = null;
+		
+		try {
+			fileRead = new FileReader(HIGHSCORE_FILE);
+			bufferRead = new BufferedReader(fileRead);
+			
+			String thisLine;
+			bufferRead = new BufferedReader(new FileReader(HIGHSCORE_FILE));
+			
+			while ((thisLine = bufferRead.readLine()) != null) {
+				try { 
+					if (Integer.parseInt(thisLine) > 0) {
+						highscores.add(Integer.parseInt(thisLine));
+						System.out.println(thisLine);
+					}
+				} catch (NumberFormatException nfe) {
+					System.out.println("not integer");
+				}
+			}
+		} catch(FileNotFoundException ex) {
+	          System.out.println(
+	        		"Unable to open file '" + 
+	        		HIGHSCORE_FILE + "'"); 
+			  try {
+				  	FileWriter fw = new FileWriter(HIGHSCORE_FILE);
+				  	BufferedWriter bw = new BufferedWriter(fw);
+				  	
+				    bw.close();
+			  } catch(IOException exs) {
+	                ex.printStackTrace();
+	          }
+		} catch(IOException exs) {
+			exs.printStackTrace();
+		}
+	}
+	
+	public void abruptEnd() {
+			Writer add;
+			try {
+				add = new BufferedWriter(new FileWriter(HIGHSCORE_FILE, true));
+				add.append("\n");
+				add.append(Integer.toString(this.score));
+				add.append("\n");
+				add.close();
+			} catch (Exception e) {
+				System.out.println("couldn't add score");
+			}
+	}
+	
+	public void openHighscores() {
+		
+		Collections.sort(highscores);
+		Collections.reverse(highscores);
+		String highscoreList = "\n";
+		for(int e : highscores) {
+			highscoreList = highscoreList + Integer.toString(e) + "\n";
+		}
+		JOptionPane.showMessageDialog(this, "Highscores are" + highscoreList);
+		
+		
 	}
 
 	@Override
