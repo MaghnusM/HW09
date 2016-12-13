@@ -62,7 +62,6 @@ public class CandyProducer extends JLabel {
 		
 		if(time != 0) {
 			court.rate = court.rate + ((Double) (amount/(time/1000.0)));
-			System.out.println((Double) (amount/(time/1000.0)));
 			Timer timer = new Timer(time, new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					makeCandy();

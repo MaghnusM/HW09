@@ -46,6 +46,10 @@ public class Candy extends GameObj{
 		}
 	}
 	
+	public int getId() {
+		return this.id;
+	}
+	
 	@Override
 	public void draw(Graphics g) {
 		g.drawImage(img, pos_x, pos_y, width, height, null);

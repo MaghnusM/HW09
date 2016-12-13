@@ -59,7 +59,7 @@ public class GameCourt extends JPanel {
 	// Set score TODO: is this the right place to put this?
 	private int score = 0;
 	
-	public static double rate = 0.0;
+	public double rate = 0.0;
 
 	public boolean playing = false; // whether the game is running
 	
@@ -98,9 +98,6 @@ public class GameCourt extends JPanel {
 		// creates border around the court area, JComponent method
 		setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		this.setLayout(null);
-		
-		System.out.println(numProducers_x);
-		System.out.println(numProducers_y);
 
 		// The timer is an object which triggers an action periodically
 		// with the given INTERVAL. One registers an ActionListener with
@@ -400,7 +397,6 @@ public class GameCourt extends JPanel {
 				try { 
 					if (Integer.parseInt(thisLine) > 0) {
 						highscores.add(Integer.parseInt(thisLine));
-						System.out.println(thisLine);
 					}
 				} catch (NumberFormatException nfe) {
 					System.out.println("not integer");
@@ -445,8 +441,18 @@ public class GameCourt extends JPanel {
 			highscoreList = highscoreList + Integer.toString(e) + "\n";
 		}
 		JOptionPane.showMessageDialog(this, "Highscores are" + highscoreList);
-		
-		
+	}
+	
+	public TreeMap<Integer, Candy> getCandies() {
+		return this.candies;
+	}
+	
+	public CandyProducer[][] getProducerGrid() {
+		return this.producerGrid;
+	}
+	
+	public int getScore() {
+		return this.score;
 	}
 
 	@Override
